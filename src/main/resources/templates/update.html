@@ -20,7 +20,6 @@
 <body>
 
 <form th:method="POST" th:action="@{/admin/update}" th:object="${user}">
-    <!--    (id=${user.getId()})-->
     <input type="hidden" th:value="${user.getId()}" name="id"/>
     <label for="name">Enter name:</label>
     <input type="text" th:field="*{username}" id="name"/>
@@ -35,14 +34,13 @@
 
     <table>
         <tr>
-            <td>
-                <input th:type="checkbox" th:selected="${user.getAuthorities() == 'ROLE_USER'}"
-                       type="hidden" value="ROLE_USER" name="role" />
+            <td><label>
+                <input type="checkbox" th:field="*{authorities}" value="ROLE_USER"/>
                 <label>USER</label>
+            </label>
             </td>
             <td><label>
-                <input th:type="checkbox" th:selected="${user.getAuthorities() == 'ROLE_ADMIN'}"
-                       type="hidden" value="ROLE_ADMIN" name="role"/>
+                <input type="checkbox" th:field="*{authorities}" value="ROLE_ADMIN"/>
                 <label>ADMIN</label>
             </label>
             </td>

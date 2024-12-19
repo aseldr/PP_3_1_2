@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -30,25 +29,30 @@ public class User implements UserDetails {
     @NotNull
     private String email;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
-
-    public User() {
-    }
+    private Set<Role> roles;
 
     public User(String username, String password, String email, Set<Role> roles) {
+        this.id = null;
         this.username = username;
         this.password = password;
         this.email = email;
         this.roles = roles;
     }
 
-    public long getId() {
-        return id;
+    public User() {
+
+    }
+
+    public User(String username) {
+    }
+
+    public Long getId() {
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -112,4 +116,16 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id != null && id.equals(user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

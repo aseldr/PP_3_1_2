@@ -1,6 +1,4 @@
 package ru.kata.spring.boot_security.demo.controller;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +14,7 @@ import ru.kata.spring.boot_security.demo.configs.SuccessUserHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 
 @Controller
@@ -26,8 +25,6 @@ public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final SuccessUserHandler successUserHandler;
 
-
-    @Autowired
     public LoginController(AuthenticationManager authenticationManager, SuccessUserHandler successUserHandler) {
         this.authenticationManager = authenticationManager;
         this.successUserHandler = successUserHandler;
@@ -39,7 +36,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpServletRequest request, HttpServletResponse response) {
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
 
@@ -48,7 +45,7 @@ public class LoginController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             successUserHandler.onAuthenticationSuccess(request, response, authentication);
-            return null;
+            return "redirect:/users";
         } catch (BadCredentialsException | IOException e) {
             model.addAttribute("error", "Invalid email or password");
             return "login";

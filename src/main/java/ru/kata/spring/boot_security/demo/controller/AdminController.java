@@ -1,13 +1,10 @@
 package ru.kata.spring.boot_security.demo.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
-
 import java.security.Principal;
 import java.util.List;
 
@@ -15,10 +12,10 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
-    public void adminController(UserService userService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
@@ -27,7 +24,7 @@ public class AdminController {
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("principal", principal);
         model.addAttribute("userPrincipal", userService.getById(Long.valueOf(principal.getName())));
-        return "index";
+        return "users";
     }
 
     @PostMapping("/delete")
@@ -49,8 +46,7 @@ public class AdminController {
     @GetMapping("/create")
     public String createUserForm(Model model) {
         model.addAttribute("user", new User());
-        UserRepository userRepository = null;
-        model.addAttribute("allRoles", userRepository.findAll());
+        model.addAttribute("allRoles", userService.getAllUsers());
         return "create";
     }
 
