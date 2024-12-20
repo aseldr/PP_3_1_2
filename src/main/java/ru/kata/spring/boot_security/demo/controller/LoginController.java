@@ -14,7 +14,6 @@ import ru.kata.spring.boot_security.demo.configs.SuccessUserHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 
 @Controller
@@ -36,7 +35,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpServletRequest request, HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
 

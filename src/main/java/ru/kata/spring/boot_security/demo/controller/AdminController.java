@@ -24,7 +24,7 @@ public class AdminController {
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("principal", principal);
         model.addAttribute("userPrincipal", userService.getById(Long.valueOf(principal.getName())));
-        return "users";
+        return "user";
     }
 
     @PostMapping("/delete")
